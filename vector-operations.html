@@ -436,6 +436,107 @@
             svg.innerHTML += svgContent;
         }
 
+        function drawParallelogramMethod(magA, angleA, magB, angleB) {
+            const svg = document.getElementById('addition-demo');
+            if (!svg) {
+                console.error('Parallelogram demo SVG element not found');
+                return;
+            }
+
+            // Validate inputs
+            const validation = validateVectorInputs(magA, angleA, magB, angleB);
+            if (validation.length > 0) {
+                svg.innerHTML = `<text x="200" y="150" text-anchor="middle" fill="var(--warning)">Invalid input parameters</text>`;
+                return;
+            }
+
+            svg.innerHTML = '';
+
+            const { CENTER_X, CENTER_Y, SCALE_FACTOR } = VECTOR_CONSTANTS;
+
+            // Convert angles to radians
+            const radA = (angleA * Math.PI) / 180;
+            const radB = (angleB * Math.PI) / 180;
+
+            // Calculate vector endpoints
+            const ax = CENTER_X + magA * SCALE_FACTOR * Math.cos(radA);
+            const ay = CENTER_Y - magA * SCALE_FACTOR * Math.sin(radA);
+
+            const bx = CENTER_X + magB * SCALE_FACTOR * Math.cos(radB);
+            const by = CENTER_Y - magB * SCALE_FACTOR * Math.sin(radB);
+
+            // Calculate resultant (A + B)
+            const rx = CENTER_X + (magA * SCALE_FACTOR * Math.cos(radA)) + (magB * SCALE_FACTOR * Math.cos(radB));
+            const ry = CENTER_Y - (magA * SCALE_FACTOR * Math.sin(radA)) + (magB * SCALE_FACTOR * Math.sin(radB));
+
+            // Build SVG content using single template string for efficiency
+            const svgContent = `
+                <line x1="20" y1="${CENTER_Y}" x2="380" y2="${CENTER_Y}" stroke="#eee" stroke-width="1"/>
+                <line x1="${CENTER_X}" y1="30" x2="${CENTER_X}" y2="270" stroke="#eee" stroke-width="1"/>
+
+                <!-- Parallelogram sides (dashed) -->
+                <line x1="${CENTER_X}" y1="${CENTER_Y}" x2="${bx}" y2="${by}" stroke="var(--primary-green)" stroke-width="2" stroke-dasharray="3,3"/>
+                <line x1="${ax}" y1="${ay}" x2="${rx}" y2="${ry}" stroke="var(--primary-blue)" stroke-width="2" stroke-dasharray="3,3"/>
+
+                <!-- Main vectors -->
+                <line x1="${CENTER_X}" y1="${CENTER_Y}" x2="${ax}" y2="${ay}" stroke="var(--primary-blue)" stroke-width="3" marker-end="url(#arrowhead-blue)"/>
+                <line x1="${CENTER_X}" y1="${CENTER_Y}" x2="${bx}" y2="${by}" stroke="var(--primary-green)" stroke-width="3" marker-end="url(#arrowhead-green)"/>
+
+                <!-- Resultant vector -->
+                <line x1="${CENTER_X}" y1="${CENTER_Y}" x2="${rx}" y2="${ry}" stroke="var(--warning)" stroke-width="3" marker-end="url(#arrowhead-red)"/>
+
+                <!-- Parallelogram fill -->
+                <polygon points="${CENTER_X},${CENTER_Y} ${ax},${ay} ${rx},${ry} ${bx},${by}" fill="rgba(135, 206, 235, 0.2)" stroke="#ccc" stroke-width="1"/>
+
+                <!-- Labels -->
+                <text x="${(CENTER_X+ax)/2}" y="${(CENTER_Y+ay)/2-10}" fill="var(--primary-blue)" font-weight="bold">A</text>
+                <text x="${(CENTER_X+bx)/2}" y="${(CENTER_Y+by)/2-10}" fill="var(--primary-green)" font-weight="bold">B</text>
+                <text x="${(CENTER_X+rx)/2+10}" y="${(CENTER_Y+ry)/2}" fill="var(--warning)" font-weight="bold">A+B</text>
+            `;
+
+            svg.innerHTML = svgContent;
+            ensureArrowheadDefinitions(svg);
+        }
+
+        function setupMethodTabs() {
+            const tabButtons = document.querySelectorAll('.tab-btn');
+            const magA = document.getElementById('magA');
+            const angleA = document.getElementById('angleA');
+            const magB = document.getElementById('magB');
+            const angleB = document.getElementById('angleB');
+
+            if (!magA || !angleA || !magB || !angleB) {
+                console.error('Required control elements not found for tab switching');
+                return;
+            }
+
+            tabButtons.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    // Update active tab
+                    tabButtons.forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+
+                    // Draw appropriate method
+                    const method = this.dataset.method;
+                    if (method === 'triangle') {
+                        drawTriangleMethod(
+                            parseFloat(magA.value),
+                            parseFloat(angleA.value),
+                            parseFloat(magB.value),
+                            parseFloat(angleB.value)
+                        );
+                    } else if (method === 'parallelogram') {
+                        drawParallelogramMethod(
+                            parseFloat(magA.value),
+                            parseFloat(angleA.value),
+                            parseFloat(magB.value),
+                            parseFloat(angleB.value)
+                        );
+                    }
+                });
+            });
+        }
+
         function setupAdditionControls() {
             const magA = document.getElementById('magA');
             const angleA = document.getElementById('angleA');
@@ -459,7 +560,13 @@
                 const validationErrors = validateVectorInputs(magAValue, angleAValue, magBValue, angleBValue);
 
                 if (validationErrors.length === 0) {
-                    drawTriangleMethod(magAValue, angleAValue, magBValue, angleBValue);
+                    // Check which tab is active and draw appropriate method
+                    const activeTab = document.querySelector('.tab-btn.active');
+                    if (activeTab && activeTab.dataset.method === 'parallelogram') {
+                        drawParallelogramMethod(magAValue, angleAValue, magBValue, angleBValue);
+                    } else {
+                        drawTriangleMethod(magAValue, angleAValue, magBValue, angleBValue);
+                    }
                 }
                 // If validation fails, drawTriangleMethod will handle the error display
             }
@@ -478,6 +585,7 @@
         document.addEventListener('DOMContentLoaded', function() {
             drawVectorBasics();
             setupAdditionControls();
+            setupMethodTabs();
         });
     </script>
 </body>
