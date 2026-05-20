@@ -235,7 +235,16 @@
             <h2>What are Vectors?</h2>
             <div class="content-grid">
                 <div class="text-content">
-                    <!-- Introduction content -->
+                    <p><strong>Vectors</strong> are mathematical objects that have both <em>magnitude</em> (size) and <em>direction</em>. Unlike regular numbers (called scalars), vectors tell us not just how much, but also which way.</p>
+
+                    <p><strong>Real-world examples:</strong></p>
+                    <ul>
+                        <li><strong>Force:</strong> Pushing a box with 10 Newtons of force to the right</li>
+                        <li><strong>Velocity:</strong> A car moving at 60 km/h north</li>
+                        <li><strong>Displacement:</strong> Walking 5 meters east</li>
+                    </ul>
+
+                    <p><strong>Vector notation:</strong> We represent vectors with arrows (→) or bold letters. In this lesson, we'll learn how to add and subtract vectors geometrically.</p>
                 </div>
                 <div class="visual-content">
                     <svg id="vector-basics" width="300" height="200"></svg>
@@ -280,6 +289,50 @@
 
     <script>
         // JavaScript will go here
+
+        function drawVectorBasics() {
+            const svg = document.getElementById('vector-basics');
+            svg.innerHTML = '';
+
+            // Add arrowhead definitions first
+            const defs = `
+                <defs>
+                    <marker id="arrowhead-blue" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                        <polygon points="0 0, 10 3.5, 0 7" fill="var(--primary-blue)"/>
+                    </marker>
+                    <marker id="arrowhead-green" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                        <polygon points="0 0, 10 3.5, 0 7" fill="var(--primary-green)"/>
+                    </marker>
+                </defs>
+            `;
+            svg.innerHTML = defs;
+
+            // Draw coordinate system
+            const centerX = 150, centerY = 100;
+
+            // Axes
+            svg.innerHTML += `<line x1="20" y1="100" x2="280" y2="100" stroke="#ccc" stroke-width="1"/>`;
+            svg.innerHTML += `<line x1="150" y1="20" x2="150" y2="180" stroke="#ccc" stroke-width="1"/>`;
+
+            // Vector A (blue)
+            const ax = centerX + 60;
+            const ay = centerY - 40;
+            svg.innerHTML += `<line x1="${centerX}" y1="${centerY}" x2="${ax}" y2="${ay}" stroke="var(--primary-blue)" stroke-width="3" marker-end="url(#arrowhead-blue)"/>`;
+
+            // Vector B (green)
+            const bx = centerX + 40;
+            const by = centerY + 50;
+            svg.innerHTML += `<line x1="${centerX}" y1="${centerY}" x2="${bx}" y2="${by}" stroke="var(--primary-green)" stroke-width="3" marker-end="url(#arrowhead-green)"/>`;
+
+            // Labels
+            svg.innerHTML += `<text x="${ax+10}" y="${ay-5}" fill="var(--primary-blue)" font-weight="bold">→A</text>`;
+            svg.innerHTML += `<text x="${bx+10}" y="${by+15}" fill="var(--primary-green)" font-weight="bold">→B</text>`;
+        }
+
+        // Add to end of script section
+        document.addEventListener('DOMContentLoaded', function() {
+            drawVectorBasics();
+        });
     </script>
 </body>
 </html>
