@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vector Linear Operations - High School Math</title>
+    <style>
+        /* CSS will go here */
+    </style>
+</head>
+<body>
+    <header class="header">
+        <h1>Vector Linear Operations</h1>
+        <p>Learn vector addition and subtraction through interactive visualizations</p>
+    </header>
+
+    <main class="main-content">
+        <section id="introduction" class="section">
+            <h2>What are Vectors?</h2>
+            <div class="content-grid">
+                <div class="text-content">
+                    <!-- Introduction content -->
+                </div>
+                <div class="visual-content">
+                    <svg id="vector-basics" width="300" height="200"></svg>
+                </div>
+            </div>
+        </section>
+
+        <section id="addition" class="section">
+            <h2>Vector Addition</h2>
+            <div class="method-tabs">
+                <button class="tab-btn active" data-method="triangle">Triangle Method</button>
+                <button class="tab-btn" data-method="parallelogram">Parallelogram Method</button>
+            </div>
+            <div class="demo-area">
+                <svg id="addition-demo" width="400" height="300"></svg>
+                <div class="controls">
+                    <label>Vector A magnitude: <input type="range" id="magA" min="1" max="10" value="5"></label>
+                    <label>Vector A angle: <input type="range" id="angleA" min="0" max="360" value="45"></label>
+                    <label>Vector B magnitude: <input type="range" id="magB" min="1" max="10" value="3"></label>
+                    <label>Vector B angle: <input type="range" id="angleB" min="0" max="360" value="120"></label>
+                </div>
+            </div>
+        </section>
+
+        <section id="subtraction" class="section">
+            <h2>Vector Subtraction</h2>
+            <div class="demo-area">
+                <svg id="subtraction-demo" width="400" height="300"></svg>
+                <div class="controls">
+                    <button id="show-steps">Show Step-by-Step</button>
+                </div>
+            </div>
+        </section>
+
+        <section id="practice" class="section">
+            <h2>Practice Examples</h2>
+            <div class="examples-grid">
+                <!-- Practice examples will go here -->
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // JavaScript will go here
+    </script>
+</body>
+</html>
