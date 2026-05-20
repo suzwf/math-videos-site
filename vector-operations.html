@@ -329,9 +329,84 @@
             svg.innerHTML += `<text x="${bx+10}" y="${by+15}" fill="var(--primary-green)" font-weight="bold">→B</text>`;
         }
 
+        function drawTriangleMethod(magA, angleA, magB, angleB) {
+            const svg = document.getElementById('addition-demo');
+            svg.innerHTML = '';
+
+            const centerX = 200, centerY = 150;
+            const scale = 20;
+
+            // Convert angles to radians
+            const radA = (angleA * Math.PI) / 180;
+            const radB = (angleB * Math.PI) / 180;
+
+            // Calculate vector endpoints
+            const ax = centerX + magA * scale * Math.cos(radA);
+            const ay = centerY - magA * scale * Math.sin(radA);
+
+            const bx = ax + magB * scale * Math.cos(radB);
+            const by = ay - magB * scale * Math.sin(radB);
+
+            // Draw coordinate system
+            svg.innerHTML += `<line x1="20" y1="150" x2="380" y2="150" stroke="#eee" stroke-width="1"/>`;
+            svg.innerHTML += `<line x1="200" y1="30" x2="200" y2="270" stroke="#eee" stroke-width="1"/>`;
+
+            // Add arrowhead definitions if not present
+            const defs = svg.querySelector('defs') || document.createElementNS('http://www.w3.org/2000/svg', 'defs');
+            if (!document.getElementById('arrowhead-red')) {
+                defs.innerHTML += `
+                    <marker id="arrowhead-red" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                        <polygon points="0 0, 10 3.5, 0 7" fill="var(--warning)"/>
+                    </marker>
+                `;
+            }
+            if (!svg.querySelector('defs')) {
+                svg.appendChild(defs);
+            }
+
+            // Draw Vector A (blue)
+            svg.innerHTML += `<line x1="${centerX}" y1="${centerY}" x2="${ax}" y2="${ay}" stroke="var(--primary-blue)" stroke-width="3" marker-end="url(#arrowhead-blue)"/>`;
+
+            // Draw Vector B (green) - starting from head of A
+            svg.innerHTML += `<line x1="${ax}" y1="${ay}" x2="${bx}" y2="${by}" stroke="var(--primary-green)" stroke-width="3" marker-end="url(#arrowhead-green)"/>`;
+
+            // Draw Resultant Vector (red) - from start of A to end of B
+            svg.innerHTML += `<line x1="${centerX}" y1="${centerY}" x2="${bx}" y2="${by}" stroke="var(--warning)" stroke-width="3" stroke-dasharray="5,5" marker-end="url(#arrowhead-red)"/>`;
+
+            // Labels
+            svg.innerHTML += `<text x="${(centerX+ax)/2}" y="${(centerY+ay)/2-10}" fill="var(--primary-blue)" font-weight="bold">A</text>`;
+            svg.innerHTML += `<text x="${(ax+bx)/2}" y="${(ay+by)/2-10}" fill="var(--primary-green)" font-weight="bold">B</text>`;
+            svg.innerHTML += `<text x="${(centerX+bx)/2+10}" y="${(centerY+by)/2}" fill="var(--warning)" font-weight="bold">A+B</text>`;
+        }
+
+        function setupAdditionControls() {
+            const magA = document.getElementById('magA');
+            const angleA = document.getElementById('angleA');
+            const magB = document.getElementById('magB');
+            const angleB = document.getElementById('angleB');
+
+            function updateDemo() {
+                drawTriangleMethod(
+                    parseFloat(magA.value),
+                    parseFloat(angleA.value),
+                    parseFloat(magB.value),
+                    parseFloat(angleB.value)
+                );
+            }
+
+            magA.addEventListener('input', updateDemo);
+            angleA.addEventListener('input', updateDemo);
+            magB.addEventListener('input', updateDemo);
+            angleB.addEventListener('input', updateDemo);
+
+            // Initial draw
+            updateDemo();
+        }
+
         // Add to end of script section
         document.addEventListener('DOMContentLoaded', function() {
             drawVectorBasics();
+            setupAdditionControls();
         });
     </script>
 </body>
