@@ -290,93 +290,150 @@
     <script>
         // JavaScript will go here
 
+        // Constants for vector operations
+        const VECTOR_CONSTANTS = {
+            SCALE_FACTOR: 20,
+            CENTER_X: 200,
+            CENTER_Y: 150,
+            MIN_MAGNITUDE: 1,
+            MAX_MAGNITUDE: 10,
+            MIN_ANGLE: 0,
+            MAX_ANGLE: 360
+        };
+
         function drawVectorBasics() {
             const svg = document.getElementById('vector-basics');
+
+            // Error handling for missing SVG element
+            if (!svg) {
+                console.error('SVG element with ID "vector-basics" not found');
+                return;
+            }
+
             svg.innerHTML = '';
 
-            // Add arrowhead definitions first
-            const defs = `
-                <defs>
-                    <marker id="arrowhead-blue" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
-                        <polygon points="0 0, 10 3.5, 0 7" fill="var(--primary-blue)"/>
-                    </marker>
-                    <marker id="arrowhead-green" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
-                        <polygon points="0 0, 10 3.5, 0 7" fill="var(--primary-green)"/>
-                    </marker>
-                </defs>
-            `;
-            svg.innerHTML = defs;
+            // Ensure arrowhead definitions exist
+            ensureArrowheadDefinitions(svg);
 
             // Draw coordinate system
             const centerX = 150, centerY = 100;
 
-            // Axes
-            svg.innerHTML += `<line x1="20" y1="100" x2="280" y2="100" stroke="#ccc" stroke-width="1"/>`;
-            svg.innerHTML += `<line x1="150" y1="20" x2="150" y2="180" stroke="#ccc" stroke-width="1"/>`;
+            // Generate SVG content using a single template string for efficiency
+            const svgContent = `
+                <line x1="20" y1="100" x2="280" y2="100" stroke="#ccc" stroke-width="1"/>
+                <line x1="150" y1="20" x2="150" y2="180" stroke="#ccc" stroke-width="1"/>
+                <line x1="${centerX}" y1="${centerY}" x2="${centerX + 60}" y2="${centerY - 40}" stroke="var(--primary-blue)" stroke-width="3" marker-end="url(#arrowhead-blue)"/>
+                <line x1="${centerX}" y1="${centerY}" x2="${centerX + 40}" y2="${centerY + 50}" stroke="var(--primary-green)" stroke-width="3" marker-end="url(#arrowhead-green)"/>
+                <text x="${centerX + 70}" y="${centerY - 45}" fill="var(--primary-blue)" font-weight="bold">→A</text>
+                <text x="${centerX + 50}" y="${centerY + 65}" fill="var(--primary-green)" font-weight="bold">→B</text>
+            `;
 
-            // Vector A (blue)
-            const ax = centerX + 60;
-            const ay = centerY - 40;
-            svg.innerHTML += `<line x1="${centerX}" y1="${centerY}" x2="${ax}" y2="${ay}" stroke="var(--primary-blue)" stroke-width="3" marker-end="url(#arrowhead-blue)"/>`;
+            svg.innerHTML += svgContent;
+        }
 
-            // Vector B (green)
-            const bx = centerX + 40;
-            const by = centerY + 50;
-            svg.innerHTML += `<line x1="${centerX}" y1="${centerY}" x2="${bx}" y2="${by}" stroke="var(--primary-green)" stroke-width="3" marker-end="url(#arrowhead-green)"/>`;
+        function validateVectorInputs(magA, angleA, magB, angleB) {
+            const errors = [];
 
-            // Labels
-            svg.innerHTML += `<text x="${ax+10}" y="${ay-5}" fill="var(--primary-blue)" font-weight="bold">→A</text>`;
-            svg.innerHTML += `<text x="${bx+10}" y="${by+15}" fill="var(--primary-green)" font-weight="bold">→B</text>`;
+            if (typeof magA !== 'number' || magA < VECTOR_CONSTANTS.MIN_MAGNITUDE || magA > VECTOR_CONSTANTS.MAX_MAGNITUDE) {
+                errors.push(`Vector A magnitude must be a number between ${VECTOR_CONSTANTS.MIN_MAGNITUDE} and ${VECTOR_CONSTANTS.MAX_MAGNITUDE}`);
+            }
+
+            if (typeof angleA !== 'number' || angleA < VECTOR_CONSTANTS.MIN_ANGLE || angleA > VECTOR_CONSTANTS.MAX_ANGLE) {
+                errors.push(`Vector A angle must be a number between ${VECTOR_CONSTANTS.MIN_ANGLE} and ${VECTOR_CONSTANTS.MAX_ANGLE} degrees`);
+            }
+
+            if (typeof magB !== 'number' || magB < VECTOR_CONSTANTS.MIN_MAGNITUDE || magB > VECTOR_CONSTANTS.MAX_MAGNITUDE) {
+                errors.push(`Vector B magnitude must be a number between ${VECTOR_CONSTANTS.MIN_MAGNITUDE} and ${VECTOR_CONSTANTS.MAX_MAGNITUDE}`);
+            }
+
+            if (typeof angleB !== 'number' || angleB < VECTOR_CONSTANTS.MIN_ANGLE || angleB > VECTOR_CONSTANTS.MAX_ANGLE) {
+                errors.push(`Vector B angle must be a number between ${VECTOR_CONSTANTS.MIN_ANGLE} and ${VECTOR_CONSTANTS.MAX_ANGLE} degrees`);
+            }
+
+            return errors;
+        }
+
+        function ensureArrowheadDefinitions(svg) {
+            if (!svg) return;
+
+            let defs = svg.querySelector('defs');
+            if (!defs) {
+                defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
+                svg.appendChild(defs);
+            }
+
+            // Add arrowhead definitions if they don't exist
+            const arrowheads = [
+                { id: 'arrowhead-blue', color: 'var(--primary-blue)' },
+                { id: 'arrowhead-green', color: 'var(--primary-green)' },
+                { id: 'arrowhead-red', color: 'var(--warning)' }
+            ];
+
+            arrowheads.forEach(arrow => {
+                if (!document.getElementById(arrow.id)) {
+                    const marker = document.createElementNS('http://www.w3.org/2000/svg', 'marker');
+                    marker.setAttribute('id', arrow.id);
+                    marker.setAttribute('markerWidth', '10');
+                    marker.setAttribute('markerHeight', '7');
+                    marker.setAttribute('refX', '9');
+                    marker.setAttribute('refY', '3.5');
+                    marker.setAttribute('orient', 'auto');
+
+                    const polygon = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
+                    polygon.setAttribute('points', '0 0, 10 3.5, 0 7');
+                    polygon.setAttribute('fill', arrow.color);
+
+                    marker.appendChild(polygon);
+                    defs.appendChild(marker);
+                }
+            });
         }
 
         function drawTriangleMethod(magA, angleA, magB, angleB) {
             const svg = document.getElementById('addition-demo');
-            svg.innerHTML = '';
 
-            const centerX = 200, centerY = 150;
-            const scale = 20;
+            // Error handling for missing SVG element
+            if (!svg) {
+                console.error('SVG element with ID "addition-demo" not found');
+                return;
+            }
+
+            // Validate inputs
+            const validationErrors = validateVectorInputs(magA, angleA, magB, angleB);
+            if (validationErrors.length > 0) {
+                console.error('Vector input validation failed:', validationErrors);
+                svg.innerHTML = `<text x="20" y="50" fill="var(--warning)" font-weight="bold">Error: Invalid input parameters</text>`;
+                return;
+            }
+
+            // Clear SVG and ensure arrowhead definitions
+            svg.innerHTML = '';
+            ensureArrowheadDefinitions(svg);
 
             // Convert angles to radians
             const radA = (angleA * Math.PI) / 180;
             const radB = (angleB * Math.PI) / 180;
 
             // Calculate vector endpoints
-            const ax = centerX + magA * scale * Math.cos(radA);
-            const ay = centerY - magA * scale * Math.sin(radA);
+            const ax = VECTOR_CONSTANTS.CENTER_X + magA * VECTOR_CONSTANTS.SCALE_FACTOR * Math.cos(radA);
+            const ay = VECTOR_CONSTANTS.CENTER_Y - magA * VECTOR_CONSTANTS.SCALE_FACTOR * Math.sin(radA);
 
-            const bx = ax + magB * scale * Math.cos(radB);
-            const by = ay - magB * scale * Math.sin(radB);
+            const bx = ax + magB * VECTOR_CONSTANTS.SCALE_FACTOR * Math.cos(radB);
+            const by = ay - magB * VECTOR_CONSTANTS.SCALE_FACTOR * Math.sin(radB);
 
-            // Draw coordinate system
-            svg.innerHTML += `<line x1="20" y1="150" x2="380" y2="150" stroke="#eee" stroke-width="1"/>`;
-            svg.innerHTML += `<line x1="200" y1="30" x2="200" y2="270" stroke="#eee" stroke-width="1"/>`;
+            // Generate SVG content using a single template string for efficiency
+            const svgContent = `
+                <line x1="20" y1="150" x2="380" y2="150" stroke="#eee" stroke-width="1"/>
+                <line x1="200" y1="30" x2="200" y2="270" stroke="#eee" stroke-width="1"/>
+                <line x1="${VECTOR_CONSTANTS.CENTER_X}" y1="${VECTOR_CONSTANTS.CENTER_Y}" x2="${ax}" y2="${ay}" stroke="var(--primary-blue)" stroke-width="3" marker-end="url(#arrowhead-blue)"/>
+                <line x1="${ax}" y1="${ay}" x2="${bx}" y2="${by}" stroke="var(--primary-green)" stroke-width="3" marker-end="url(#arrowhead-green)"/>
+                <line x1="${VECTOR_CONSTANTS.CENTER_X}" y1="${VECTOR_CONSTANTS.CENTER_Y}" x2="${bx}" y2="${by}" stroke="var(--warning)" stroke-width="3" stroke-dasharray="5,5" marker-end="url(#arrowhead-red)"/>
+                <text x="${(VECTOR_CONSTANTS.CENTER_X+ax)/2}" y="${(VECTOR_CONSTANTS.CENTER_Y+ay)/2-10}" fill="var(--primary-blue)" font-weight="bold">A</text>
+                <text x="${(ax+bx)/2}" y="${(ay+by)/2-10}" fill="var(--primary-green)" font-weight="bold">B</text>
+                <text x="${(VECTOR_CONSTANTS.CENTER_X+bx)/2+10}" y="${(VECTOR_CONSTANTS.CENTER_Y+by)/2}" fill="var(--warning)" font-weight="bold">A+B</text>
+            `;
 
-            // Add arrowhead definitions if not present
-            const defs = svg.querySelector('defs') || document.createElementNS('http://www.w3.org/2000/svg', 'defs');
-            if (!document.getElementById('arrowhead-red')) {
-                defs.innerHTML += `
-                    <marker id="arrowhead-red" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
-                        <polygon points="0 0, 10 3.5, 0 7" fill="var(--warning)"/>
-                    </marker>
-                `;
-            }
-            if (!svg.querySelector('defs')) {
-                svg.appendChild(defs);
-            }
-
-            // Draw Vector A (blue)
-            svg.innerHTML += `<line x1="${centerX}" y1="${centerY}" x2="${ax}" y2="${ay}" stroke="var(--primary-blue)" stroke-width="3" marker-end="url(#arrowhead-blue)"/>`;
-
-            // Draw Vector B (green) - starting from head of A
-            svg.innerHTML += `<line x1="${ax}" y1="${ay}" x2="${bx}" y2="${by}" stroke="var(--primary-green)" stroke-width="3" marker-end="url(#arrowhead-green)"/>`;
-
-            // Draw Resultant Vector (red) - from start of A to end of B
-            svg.innerHTML += `<line x1="${centerX}" y1="${centerY}" x2="${bx}" y2="${by}" stroke="var(--warning)" stroke-width="3" stroke-dasharray="5,5" marker-end="url(#arrowhead-red)"/>`;
-
-            // Labels
-            svg.innerHTML += `<text x="${(centerX+ax)/2}" y="${(centerY+ay)/2-10}" fill="var(--primary-blue)" font-weight="bold">A</text>`;
-            svg.innerHTML += `<text x="${(ax+bx)/2}" y="${(ay+by)/2-10}" fill="var(--primary-green)" font-weight="bold">B</text>`;
-            svg.innerHTML += `<text x="${(centerX+bx)/2+10}" y="${(centerY+by)/2}" fill="var(--warning)" font-weight="bold">A+B</text>`;
+            svg.innerHTML += svgContent;
         }
 
         function setupAdditionControls() {
@@ -385,15 +442,29 @@
             const magB = document.getElementById('magB');
             const angleB = document.getElementById('angleB');
 
-            function updateDemo() {
-                drawTriangleMethod(
-                    parseFloat(magA.value),
-                    parseFloat(angleA.value),
-                    parseFloat(magB.value),
-                    parseFloat(angleB.value)
-                );
+            // Error handling for missing controls
+            const controls = [magA, angleA, magB, angleB];
+            if (controls.some(control => !control)) {
+                console.error('One or more control elements not found');
+                return;
             }
 
+            function updateDemo() {
+                const magAValue = parseFloat(magA.value);
+                const angleAValue = parseFloat(angleA.value);
+                const magBValue = parseFloat(magB.value);
+                const angleBValue = parseFloat(angleB.value);
+
+                // Validate inputs before drawing
+                const validationErrors = validateVectorInputs(magAValue, angleAValue, magBValue, angleBValue);
+
+                if (validationErrors.length === 0) {
+                    drawTriangleMethod(magAValue, angleAValue, magBValue, angleBValue);
+                }
+                // If validation fails, drawTriangleMethod will handle the error display
+            }
+
+            // Add event listeners
             magA.addEventListener('input', updateDemo);
             angleA.addEventListener('input', updateDemo);
             magB.addEventListener('input', updateDemo);
