@@ -275,7 +275,18 @@
                 <svg id="subtraction-demo" width="400" height="300"></svg>
                 <div class="controls">
                     <button id="show-steps">Show Step-by-Step</button>
+                    <div class="subtraction-controls">
+                        <label>Vector A magnitude: <input type="range" id="subMagA" min="1" max="10" value="6"></label>
+                        <label>Vector A angle: <input type="range" id="subAngleA" min="0" max="360" value="45"></label>
+                        <label>Vector B magnitude: <input type="range" id="subMagB" min="1" max="10" value="4"></label>
+                        <label>Vector B angle: <input type="range" id="subAngleB" min="0" max="360" value="135"></label>
+                    </div>
                 </div>
+            </div>
+            <div class="explanation-text">
+                <h3>Understanding Vector Subtraction</h3>
+                <p><strong>A - B = A + (-B)</strong></p>
+                <p>Vector subtraction is the same as adding the negative of a vector. The negative vector has the same magnitude but opposite direction.</p>
             </div>
         </section>
 
@@ -581,11 +592,158 @@
             updateDemo();
         }
 
+        let showSubtractionSteps = false;
+
+        function drawSubtraction(magA, angleA, magB, angleB, showSteps = false) {
+            const svg = document.getElementById('subtraction-demo');
+            if (!svg) {
+                console.error('Subtraction demo SVG element not found');
+                return;
+            }
+
+            // Validate inputs
+            const validationErrors = validateVectorInputs(magA, angleA, magB, angleB);
+            if (validationErrors.length > 0) {
+                svg.innerHTML = `<text x="200" y="150" text-anchor="middle" fill="var(--warning)">Invalid input parameters</text>`;
+                return;
+            }
+
+            svg.innerHTML = '';
+
+            const { CENTER_X, CENTER_Y, SCALE_FACTOR } = VECTOR_CONSTANTS;
+
+            // Convert angles to radians
+            const radA = (angleA * Math.PI) / 180;
+            const radB = (angleB * Math.PI) / 180;
+
+            // Calculate vector endpoints
+            const ax = CENTER_X + magA * SCALE_FACTOR * Math.cos(radA);
+            const ay = CENTER_Y - magA * SCALE_FACTOR * Math.sin(radA);
+
+            const bx = CENTER_X + magB * SCALE_FACTOR * Math.cos(radB);
+            const by = CENTER_Y - magB * SCALE_FACTOR * Math.sin(radB);
+
+            // Calculate -B (opposite direction)
+            const negBx = CENTER_X - magB * SCALE_FACTOR * Math.cos(radB);
+            const negBy = CENTER_Y + magB * SCALE_FACTOR * Math.sin(radB);
+
+            // Calculate A - B = A + (-B)
+            const resultX = CENTER_X + (magA * SCALE_FACTOR * Math.cos(radA)) - (magB * SCALE_FACTOR * Math.cos(radB));
+            const resultY = CENTER_Y - (magA * SCALE_FACTOR * Math.sin(radA)) + (magB * SCALE_FACTOR * Math.sin(radB));
+
+            let svgContent = `
+                <!-- Coordinate system -->
+                <line x1="20" y1="${CENTER_Y}" x2="380" y2="${CENTER_Y}" stroke="#eee" stroke-width="1"/>
+                <line x1="${CENTER_X}" y1="30" x2="${CENTER_X}" y2="270" stroke="#eee" stroke-width="1"/>
+            `;
+
+            if (showSteps) {
+                // Step-by-step visualization
+                svgContent += `
+                    <!-- Step 1: Show original vectors -->
+                    <line x1="${CENTER_X}" y1="${CENTER_Y}" x2="${ax}" y2="${ay}" stroke="var(--primary-blue)" stroke-width="3" marker-end="url(#arrowhead-blue)"/>
+                    <line x1="${CENTER_X}" y1="${CENTER_Y}" x2="${bx}" y2="${by}" stroke="var(--primary-green)" stroke-width="2" stroke-dasharray="5,5"/>
+
+                    <!-- Step 2: Show -B vector -->
+                    <line x1="${CENTER_X}" y1="${CENTER_Y}" x2="${negBx}" y2="${negBy}" stroke="var(--primary-green)" stroke-width="3" marker-end="url(#arrowhead-green-neg)"/>
+
+                    <!-- Step 3: Show A + (-B) using triangle method -->
+                    <line x1="${ax}" y1="${ay}" x2="${resultX}" y2="${resultY}" stroke="var(--primary-green)" stroke-width="3" marker-end="url(#arrowhead-green-neg)"/>
+
+                    <!-- Step 4: Show final result -->
+                    <line x1="${CENTER_X}" y1="${CENTER_Y}" x2="${resultX}" y2="${resultY}" stroke="var(--warning)" stroke-width="4" marker-end="url(#arrowhead-red)"/>
+
+                    <!-- Labels -->
+                    <text x="${(CENTER_X+ax)/2}" y="${(CENTER_Y+ay)/2-10}" fill="var(--primary-blue)" font-weight="bold">A</text>
+                    <text x="${CENTER_X+10}" y="${CENTER_Y+20}" fill="var(--primary-green)" font-weight="bold">B</text>
+                    <text x="${(CENTER_X+negBx)/2}" y="${(CENTER_Y+negBy)/2-10}" fill="var(--primary-green)" font-weight="bold">-B</text>
+                    <text x="${(CENTER_X+resultX)/2+10}" y="${(CENTER_Y+resultY)/2}" fill="var(--warning)" font-weight="bold">A-B</text>
+                `;
+            } else {
+                // Simple view - just show the result
+                svgContent += `
+                    <line x1="${CENTER_X}" y1="${CENTER_Y}" x2="${ax}" y2="${ay}" stroke="var(--primary-blue)" stroke-width="3" marker-end="url(#arrowhead-blue)"/>
+                    <line x1="${CENTER_X}" y1="${CENTER_Y}" x2="${bx}" y2="${by}" stroke="var(--primary-green)" stroke-width="3" marker-end="url(#arrowhead-green)"/>
+                    <line x1="${CENTER_X}" y1="${CENTER_Y}" x2="${resultX}" y2="${resultY}" stroke="var(--warning)" stroke-width="4" marker-end="url(#arrowhead-red)"/>
+
+                    <!-- Labels -->
+                    <text x="${(CENTER_X+ax)/2}" y="${(CENTER_Y+ay)/2-10}" fill="var(--primary-blue)" font-weight="bold">A</text>
+                    <text x="${(CENTER_X+bx)/2}" y="${(CENTER_Y+by)/2-10}" fill="var(--primary-green)" font-weight="bold">B</text>
+                    <text x="${(CENTER_X+resultX)/2+10}" y="${(CENTER_Y+resultY)/2}" fill="var(--warning)" font-weight="bold">A-B</text>
+                `;
+            }
+
+            svg.innerHTML = svgContent;
+            ensureArrowheadDefinitions(svg);
+
+            // Add negative green arrowhead if showing steps
+            if (showSteps) {
+                const defs = svg.querySelector('defs') || document.createElementNS('http://www.w3.org/2000/svg', 'defs');
+                if (!document.getElementById('arrowhead-green-neg')) {
+                    const marker = document.createElementNS('http://www.w3.org/2000/svg', 'marker');
+                    marker.setAttribute('id', 'arrowhead-green-neg');
+                    marker.setAttribute('markerWidth', '10');
+                    marker.setAttribute('markerHeight', '7');
+                    marker.setAttribute('refX', '9');
+                    marker.setAttribute('refY', '3.5');
+                    marker.setAttribute('orient', 'auto');
+
+                    const polygon = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
+                    polygon.setAttribute('points', '0 0, 10 3.5, 0 7');
+                    polygon.setAttribute('fill', 'var(--primary-green)');
+
+                    marker.appendChild(polygon);
+                    defs.appendChild(marker);
+                }
+                if (!svg.querySelector('defs')) {
+                    svg.appendChild(defs);
+                }
+            }
+        }
+
+        function setupSubtractionControls() {
+            const subMagA = document.getElementById('subMagA');
+            const subAngleA = document.getElementById('subAngleA');
+            const subMagB = document.getElementById('subMagB');
+            const subAngleB = document.getElementById('subAngleB');
+            const showStepsBtn = document.getElementById('show-steps');
+
+            if (!subMagA || !subAngleA || !subMagB || !subAngleB || !showStepsBtn) {
+                console.error('Required subtraction control elements not found');
+                return;
+            }
+
+            function updateSubtractionDemo() {
+                drawSubtraction(
+                    parseFloat(subMagA.value),
+                    parseFloat(subAngleA.value),
+                    parseFloat(subMagB.value),
+                    parseFloat(subAngleB.value),
+                    showSubtractionSteps
+                );
+            }
+
+            subMagA.addEventListener('input', updateSubtractionDemo);
+            subAngleA.addEventListener('input', updateSubtractionDemo);
+            subMagB.addEventListener('input', updateSubtractionDemo);
+            subAngleB.addEventListener('input', updateSubtractionDemo);
+
+            showStepsBtn.addEventListener('click', function() {
+                showSubtractionSteps = !showSubtractionSteps;
+                this.textContent = showSubtractionSteps ? 'Hide Steps' : 'Show Step-by-Step';
+                updateSubtractionDemo();
+            });
+
+            // Initial draw
+            updateSubtractionDemo();
+        }
+
         // Add to end of script section
         document.addEventListener('DOMContentLoaded', function() {
             drawVectorBasics();
             setupAdditionControls();
             setupMethodTabs();
+            setupSubtractionControls();
         });
     </script>
 </body>
