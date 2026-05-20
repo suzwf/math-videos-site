@@ -5,7 +5,223 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vector Linear Operations - High School Math</title>
     <style>
-        /* CSS will go here */
+        /* Modern Educational Theme - Vector Operations */
+        :root {
+            --primary-blue: #4682B4;
+            --primary-green: #2E8B57;
+            --light-blue: #87CEEB;
+            --light-green: #20B2AA;
+            --dark-text: #2C3E50;
+            --light-text: #ECF0F1;
+            --accent: #F39C12;
+            --success: #27AE60;
+            --warning: #E74C3C;
+            --border-radius: 8px;
+            --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--dark-text);
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--primary-blue), var(--primary-green));
+            color: var(--light-text);
+            padding: 2rem 1rem;
+            text-align: center;
+            box-shadow: var(--box-shadow);
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .main-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+
+        .section {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--box-shadow);
+            transition: var(--transition);
+        }
+
+        .section:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .section h2 {
+            color: var(--primary-blue);
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            border-bottom: 3px solid var(--light-green);
+            padding-bottom: 0.5rem;
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .text-content {
+            font-size: 1.1rem;
+        }
+
+        .text-content p {
+            margin-bottom: 1rem;
+        }
+
+        .visual-content {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .method-tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .tab-btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: var(--border-radius);
+            background: var(--light-blue);
+            color: var(--dark-text);
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .tab-btn:hover {
+            background: var(--primary-blue);
+            color: var(--light-text);
+        }
+
+        .tab-btn.active {
+            background: var(--primary-green);
+            color: var(--light-text);
+        }
+
+        .demo-area {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            align-items: center;
+        }
+
+        .controls {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            width: 100%;
+            max-width: 600px;
+        }
+
+        .controls label {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            font-weight: 600;
+            color: var(--primary-blue);
+        }
+
+        .controls input[type="range"] {
+            width: 100%;
+            height: 6px;
+            border-radius: 3px;
+            background: var(--light-blue);
+            outline: none;
+            -webkit-appearance: none;
+        }
+
+        .controls input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--primary-green);
+            cursor: pointer;
+        }
+
+        #show-steps {
+            padding: 0.75rem 2rem;
+            background: var(--accent);
+            color: var(--light-text);
+            border: none;
+            border-radius: var(--border-radius);
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        #show-steps:hover {
+            background: var(--primary-green);
+            transform: scale(1.05);
+        }
+
+        .examples-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .example-card {
+            background: linear-gradient(135deg, var(--light-blue) 0%, var(--light-green) 100%);
+            padding: 1.5rem;
+            border-radius: var(--border-radius);
+            color: var(--dark-text);
+        }
+
+        .example-card h3 {
+            color: var(--primary-blue);
+            margin-bottom: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .controls {
+                grid-template-columns: 1fr;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .section {
+                padding: 1.5rem;
+            }
+        }
     </style>
 </head>
 <body>
