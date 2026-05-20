@@ -205,6 +205,86 @@
             margin-bottom: 1rem;
         }
 
+        .solution-steps {
+            margin-top: 1rem;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: var(--border-radius);
+            font-size: 0.9rem;
+        }
+
+        .solution-steps p {
+            margin-bottom: 0.5rem;
+        }
+
+        .explanation-text {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background: linear-gradient(135deg, var(--light-green) 0%, var(--light-blue) 100%);
+            border-radius: var(--border-radius);
+            color: var(--dark-text);
+        }
+
+        .explanation-text h3 {
+            color: var(--primary-blue);
+            margin-bottom: 1rem;
+        }
+
+        .explanation-text p {
+            margin-bottom: 0.5rem;
+        }
+
+        .subtraction-controls {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        /* Enhanced practice section styling */
+        #practice .section h2 {
+            border-bottom-color: var(--accent);
+        }
+
+        .example-card {
+            transition: var(--transition);
+        }
+
+        .example-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        }
+
+        .example-card h3 {
+            color: var(--primary-blue);
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+
+        .example-card p {
+            margin-bottom: 0.75rem;
+            line-height: 1.5;
+        }
+
+        .example-card ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+
+        .example-card ul li {
+            margin-bottom: 0.5rem;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        .example-card ul li:before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: var(--primary-green);
+            font-weight: bold;
+        }
+
         @media (max-width: 768px) {
             .content-grid {
                 grid-template-columns: 1fr;
@@ -293,7 +373,48 @@
         <section id="practice" class="section">
             <h2>Practice Examples</h2>
             <div class="examples-grid">
-                <!-- Practice examples will go here -->
+                <div class="example-card">
+                    <h3>Example 1: Triangle Method</h3>
+                    <p><strong>Problem:</strong> Add vectors A = 5 units at 30° and B = 3 units at 120°</p>
+                    <div class="solution-steps">
+                        <p><strong>Step 1:</strong> Draw vector A from origin</p>
+                        <p><strong>Step 2:</strong> Draw vector B starting from head of A</p>
+                        <p><strong>Step 3:</strong> Draw resultant from origin to head of B</p>
+                        <p><strong>Result:</strong> Use triangle method to find magnitude and direction</p>
+                    </div>
+                </div>
+
+                <div class="example-card">
+                    <h3>Example 2: Parallelogram Method</h3>
+                    <p><strong>Problem:</strong> Add vectors A = 4 units east and B = 3 units north</p>
+                    <div class="solution-steps">
+                        <p><strong>Step 1:</strong> Draw both vectors from same starting point</p>
+                        <p><strong>Step 2:</strong> Complete the parallelogram</p>
+                        <p><strong>Step 3:</strong> Draw diagonal from starting point</p>
+                        <p><strong>Result:</strong> 5 units at 36.9° north of east</p>
+                    </div>
+                </div>
+
+                <div class="example-card">
+                    <h3>Example 3: Vector Subtraction</h3>
+                    <p><strong>Problem:</strong> Find A - B where A = 6 units at 45°, B = 4 units at 135°</p>
+                    <div class="solution-steps">
+                        <p><strong>Step 1:</strong> Remember A - B = A + (-B)</p>
+                        <p><strong>Step 2:</strong> Find -B (same magnitude, opposite direction)</p>
+                        <p><strong>Step 3:</strong> Add A and -B using triangle method</p>
+                        <p><strong>Result:</strong> Use vector addition techniques</p>
+                    </div>
+                </div>
+
+                <div class="example-card">
+                    <h3>Key Concepts</h3>
+                    <ul>
+                        <li><strong>Commutative Property:</strong> A + B = B + A</li>
+                        <li><strong>Associative Property:</strong> (A + B) + C = A + (B + C)</li>
+                        <li><strong>Negative Vector:</strong> -A has same magnitude, opposite direction</li>
+                        <li><strong>Zero Vector:</strong> Vector with zero magnitude</li>
+                    </ul>
+                </div>
             </div>
         </section>
     </main>
