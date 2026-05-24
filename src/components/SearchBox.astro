@@ -1,0 +1,42 @@
+---
+export interface Props {
+  query?: string;
+}
+
+const { query = '' } = Astro.props;
+---
+<form class="search-box" action="/search" method="get">
+  <input name="q" value={query} type="search" placeholder="搜索章节、知识点或题型，例如：函数、向量、数列" aria-label="搜索视频" />
+  <button class="btn" type="submit">搜索</button>
+</form>
+
+<style>
+  .search-box {
+    display: flex;
+    gap: 10px;
+    width: 100%;
+  }
+
+  input {
+    flex: 1;
+    min-width: 0;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    background: white;
+    color: var(--text);
+    min-height: 44px;
+    padding: 0 14px;
+    font: inherit;
+  }
+
+  input:focus {
+    border-color: var(--brand);
+    outline: 3px solid rgba(37, 99, 235, 0.12);
+  }
+
+  @media (max-width: 560px) {
+    .search-box {
+      flex-direction: column;
+    }
+  }
+</style>

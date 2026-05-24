@@ -1,0 +1,148 @@
+[
+  {
+    "id": "grade-10",
+    "name": "高一数学",
+    "description": "适合高一同步预习、课后复习和基础巩固的高中数学内容。",
+    "chapters": [
+      {
+        "id": "sets",
+        "name": "集合",
+        "slug": "sets",
+        "description": "集合是高中数学的基础内容，主要包括集合的概念、表示方法、集合之间的关系和集合运算。",
+        "keywords": ["集合", "高中数学集合", "集合基础知识", "集合运算"],
+        "sections": [
+          { "id": "sets-overview", "name": "章节说明" },
+          { "id": "sets-review", "name": "基础知识复习" }
+        ]
+      },
+      {
+        "id": "inequalities",
+        "name": "不等式",
+        "slug": "inequalities",
+        "description": "不等式是高中数学的重要基础，常见内容包括一元二次不等式、基本不等式和不等式综合应用。",
+        "keywords": ["不等式", "高中数学不等式", "一元二次不等式", "基本不等式"],
+        "sections": [
+          { "id": "inequalities-overview", "name": "章节说明" },
+          { "id": "inequalities-review", "name": "基础知识复习" }
+        ]
+      },
+      {
+        "id": "functions",
+        "name": "函数",
+        "slug": "functions",
+        "description": "函数是高中数学的核心章节，主要包括函数概念、定义域、值域、单调性、奇偶性和函数应用。",
+        "keywords": ["函数", "高中数学函数", "函数基础知识", "函数复习"],
+        "sections": [
+          { "id": "functions-overview", "name": "章节说明" },
+          { "id": "functions-review", "name": "基础知识复习" }
+        ]
+      },
+      {
+        "id": "trigonometric-functions",
+        "name": "三角函数",
+        "slug": "trigonometric-functions",
+        "description": "三角函数章节主要包括任意角、弧度制、三角函数定义、诱导公式、图像与性质。",
+        "keywords": ["三角函数", "高中数学三角函数", "三角函数基础知识", "三角函数复习"],
+        "sections": [
+          { "id": "trigonometric-functions-overview", "name": "章节说明" },
+          { "id": "trigonometric-functions-review", "name": "基础知识复习" }
+        ]
+      },
+      {
+        "id": "exponential-logarithmic-functions",
+        "name": "指数函数与对数函数",
+        "slug": "exponential-logarithmic-functions",
+        "description": "指数函数与对数函数章节主要包括指数运算、指数函数、对数运算、对数函数及其图像性质。",
+        "keywords": ["指数函数", "对数函数", "指数对数", "高中数学指数函数与对数函数"],
+        "sections": [
+          { "id": "exponential-logarithmic-functions-overview", "name": "章节说明" },
+          { "id": "exponential-logarithmic-functions-review", "name": "基础知识复习" }
+        ]
+      },
+      {
+        "id": "necessary-sufficient-conditions",
+        "name": "充要条件",
+        "slug": "necessary-sufficient-conditions",
+        "description": "充要条件属于常用逻辑用语内容，重点包括充分条件、必要条件和充要条件的判断。",
+        "keywords": ["充要条件", "充分条件", "必要条件", "高中数学逻辑用语"],
+        "sections": [
+          { "id": "necessary-sufficient-conditions-overview", "name": "章节说明" },
+          { "id": "necessary-sufficient-conditions-review", "name": "基础知识复习" }
+        ]
+      },
+      {
+        "id": "vectors",
+        "name": "平面向量",
+        "slug": "vectors",
+        "description": "平面向量章节主要包括向量概念、向量运算、坐标表示、数量积和平行垂直问题。",
+        "keywords": ["平面向量", "高中数学向量", "向量基础知识", "向量复习"],
+        "sections": [
+          { "id": "vectors-overview", "name": "章节说明" },
+          { "id": "vectors-review", "name": "基础知识复习" }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "grade-11",
+    "name": "高二数学",
+    "description": "适合高二同步学习、章节复习和基础巩固的高中数学内容。",
+    "chapters": [
+      {
+        "id": "line-and-circle",
+        "name": "直线与圆的方程",
+        "slug": "line-and-circle",
+        "description": "直线与圆的方程是解析几何基础内容，主要包括直线方程、圆的方程以及直线与圆的位置关系。",
+        "keywords": ["直线与圆的方程", "直线方程", "圆的方程", "解析几何基础"],
+        "sections": [
+          { "id": "line-and-circle-overview", "name": "章节说明" },
+          { "id": "line-and-circle-review", "name": "基础知识复习" }
+        ]
+      },
+      {
+        "id": "simple-solids",
+        "name": "简单几何体",
+        "slug": "simple-solids",
+        "description": "简单几何体章节主要包括棱柱、棱锥、圆柱、圆锥、球等空间几何体的结构、表面积和体积。",
+        "keywords": ["简单几何体", "空间几何体", "立体几何基础", "几何体复习"],
+        "sections": [
+          { "id": "simple-solids-overview", "name": "章节说明" },
+          { "id": "simple-solids-review", "name": "基础知识复习" }
+        ]
+      },
+      {
+        "id": "probability-statistics",
+        "name": "概率与统计初步",
+        "slug": "probability-statistics",
+        "description": "概率与统计初步章节主要包括随机事件、古典概型、统计图表、平均数、方差和标准差等内容。",
+        "keywords": ["概率与统计初步", "高中数学概率", "高中数学统计", "概率统计基础"],
+        "sections": [
+          { "id": "probability-statistics-overview", "name": "章节说明" },
+          { "id": "probability-statistics-review", "name": "基础知识复习" }
+        ]
+      },
+      {
+        "id": "sequences",
+        "name": "数列",
+        "slug": "sequences",
+        "description": "数列是高中数学重要章节，主要包括数列概念、通项公式、等差数列、等比数列和数列求和。",
+        "keywords": ["数列", "等差数列", "等比数列", "高中数学数列"],
+        "sections": [
+          { "id": "sequences-overview", "name": "章节说明" },
+          { "id": "sequences-review", "name": "基础知识复习" }
+        ]
+      },
+      {
+        "id": "solid-geometry",
+        "name": "立体几何",
+        "slug": "solid-geometry",
+        "description": "立体几何章节主要包括空间点线面关系、平行、垂直、空间角、空间距离和考试常见题型。",
+        "keywords": ["立体几何", "空间几何", "高中数学立体几何", "立体几何复习"],
+        "sections": [
+          { "id": "solid-geometry-overview", "name": "考试说明" },
+          { "id": "solid-geometry-review", "name": "基础知识复习" }
+        ]
+      }
+    ]
+  }
+]

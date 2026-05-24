@@ -1,0 +1,56 @@
+---
+---
+<header class="site-header">
+  <div class="container nav">
+    <a class="logo" href="/">高中数学短视频</a>
+    <nav aria-label="主导航">
+      <a href="/">首页</a>
+      <a href="/#chapters">章节目录</a>
+      <a href="/search">搜索</a>
+    </nav>
+  </div>
+</header>
+
+<style>
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    border-bottom: 1px solid var(--line);
+    background: rgba(248, 250, 252, 0.9);
+    backdrop-filter: blur(12px);
+  }
+
+  .nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 68px;
+    gap: 20px;
+  }
+
+  .logo {
+    color: var(--brand-dark);
+    font-size: 20px;
+    font-weight: 800;
+  }
+
+  nav {
+    display: flex;
+    gap: 18px;
+    color: var(--muted);
+    font-weight: 600;
+  }
+
+  nav a:hover {
+    color: var(--brand);
+  }
+
+  @media (max-width: 560px) {
+    .nav {
+      align-items: flex-start;
+      flex-direction: column;
+      padding: 14px 0;
+    }
+  }
+</style>

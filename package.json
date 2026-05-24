@@ -1,0 +1,13 @@
+{
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview"
+  },
+  "dependencies": {
+    "@astrojs/sitemap": "^3.6.0",
+    "astro": "^5.16.4",
+    "bullmq": "^5.76.6",
+    "kysely": "^0.29.0"
+  }
+}

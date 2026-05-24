@@ -1,0 +1,165 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import VideoCard from '../../components/VideoCard.astro';
+import VideoPlayer from '../../components/VideoPlayer.astro';
+import { getPublishedVideos, getRelatedVideos, getVideoBySlug } from '../../utils/videos';
+
+export function getStaticPaths() {
+  return getPublishedVideos().map((video) => ({ params: { slug: video.slug } }));
+}
+
+const { slug } = Astro.params;
+const video = getVideoBySlug(slug ?? '');
+
+if (!video) {
+  return Astro.redirect('/');
+}
+
+const relatedVideos = getRelatedVideos(video);
+---
+<BaseLayout title={`${video.title}｜高中数学短视频`} description={video.description}>
+  <Header />
+  <main class="section">
+    <div class="container">
+      <Breadcrumbs items={[
+        { label: '首页', href: '/' },
+        { label: video.chapter, href: `/chapters/${video.chapter_id}` },
+        { label: video.title }
+      ]} />
+
+      <div class="watch-layout">
+        <article>
+          <VideoPlayer video={video} />
+          <div class="video-info">
+            <div class="tags">
+              <span class="pill">{video.video_type}</span>
+              <span class="pill">{video.difficulty}</span>
+            </div>
+            <h1>{video.title}</h1>
+            <p>{video.description}</p>
+            <dl>
+              <div><dt>年级</dt><dd>{video.stage}</dd></div>
+              <div><dt>章节</dt><dd><a href={`/chapters/${video.chapter_id}`}>{video.chapter}</a></dd></div>
+              <div><dt>栏目</dt><dd>{video.section}</dd></div>
+            </dl>
+            <div class="keywords">
+              {video.keywords.map((keyword) => <a href={`/search?q=${encodeURIComponent(keyword)}`}>{keyword}</a>)}
+            </div>
+          </div>
+        </article>
+
+        <aside>
+          <h2>相关视频</h2>
+          {relatedVideos.length > 0 ? (
+            <div class="related-list">
+              {relatedVideos.map((item) => <VideoCard video={item} />)}
+            </div>
+          ) : (
+            <p class="muted">暂无相关视频。</p>
+          )}
+        </aside>
+      </div>
+    </div>
+  </main>
+</BaseLayout>
+
+<style>
+  .watch-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 320px;
+    gap: 26px;
+    align-items: start;
+  }
+
+  .video-info {
+    margin-top: 22px;
+  }
+
+  .tags {
+    display: flex;
+    gap: 10px;
+  }
+
+  h1 {
+    margin: 14px 0 10px;
+    font-size: clamp(32px, 5vw, 48px);
+    line-height: 1.15;
+  }
+
+  .video-info > p {
+    margin: 0 0 22px;
+    color: var(--muted);
+    font-size: 18px;
+  }
+
+  dl {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin: 0 0 22px;
+  }
+
+  dl div {
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    background: white;
+    padding: 14px;
+  }
+
+  dt {
+    color: var(--muted);
+    font-size: 13px;
+    font-weight: 700;
+  }
+
+  dd {
+    margin: 4px 0 0;
+    font-weight: 800;
+  }
+
+  dd a {
+    color: var(--brand-dark);
+  }
+
+  .keywords {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .keywords a {
+    border-radius: 999px;
+    background: var(--soft);
+    color: var(--brand-dark);
+    padding: 6px 12px;
+    font-size: 14px;
+    font-weight: 700;
+  }
+
+  aside h2 {
+    margin: 0 0 14px;
+  }
+
+  .related-list {
+    display: grid;
+    gap: 16px;
+  }
+
+  @media (max-width: 920px) {
+    .watch-layout {
+      grid-template-columns: 1fr;
+    }
+
+    aside {
+      margin-top: 20px;
+    }
+  }
+
+  @media (max-width: 620px) {
+    dl {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

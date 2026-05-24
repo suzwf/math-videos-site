@@ -1,0 +1,80 @@
+---
+import type { Video } from '../utils/videos';
+
+export interface Props {
+  video: Video;
+}
+
+const { video } = Astro.props;
+---
+<a class="video-card card" href={`/videos/${video.slug}`}>
+  <img src={video.cover_url} alt="" loading="lazy" />
+  <div class="body">
+    <div class="tags">
+      <span class="pill">{video.video_type}</span>
+      <span class="difficulty">{video.difficulty}</span>
+    </div>
+    <h3>{video.title}</h3>
+    <p>{video.description}</p>
+    <div class="meta">{video.stage} · {video.chapter}</div>
+  </div>
+</a>
+
+<style>
+  .video-card {
+    display: block;
+    overflow: hidden;
+    transition: transform 0.18s ease, border-color 0.18s ease;
+  }
+
+  .video-card:hover {
+    border-color: #bfdbfe;
+    transform: translateY(-2px);
+  }
+
+  img {
+    display: block;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    background: var(--soft);
+  }
+
+  .body {
+    padding: 18px;
+  }
+
+  .tags {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+  }
+
+  .difficulty {
+    color: var(--muted);
+    font-size: 13px;
+    font-weight: 700;
+  }
+
+  h3 {
+    margin: 12px 0 8px;
+    font-size: 19px;
+    line-height: 1.35;
+  }
+
+  p {
+    display: -webkit-box;
+    margin: 0 0 14px;
+    overflow: hidden;
+    color: var(--muted);
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+  }
+
+  .meta {
+    color: var(--brand-dark);
+    font-size: 14px;
+    font-weight: 700;
+  }
+</style>

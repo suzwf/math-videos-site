@@ -1,0 +1,16 @@
+{
+  "fields": [
+    { "name": "title", "weight": 5 },
+    { "name": "chapter", "weight": 4 },
+    { "name": "section", "weight": 3 },
+    { "name": "keywords", "weight": 4 },
+    { "name": "description", "weight": 2 },
+    { "name": "video_type", "weight": 1 }
+  ],
+  "filters": {
+    "stage": ["高一数学", "高二数学"],
+    "video_type": ["章节导学", "基础复习", "知识点讲解", "典型题讲解", "易错题讲解", "方法技巧", "专题复习"],
+    "difficulty": ["基础", "提升", "综合"]
+  },
+  "defaultLimit": 20
+}

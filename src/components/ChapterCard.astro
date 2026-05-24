@@ -1,0 +1,44 @@
+---
+import type { Chapter } from '../utils/chapters';
+
+export interface Props {
+  chapter: Chapter;
+  videoCount: number;
+}
+
+const { chapter, videoCount } = Astro.props;
+---
+<a class="chapter-card card" href={`/chapters/${chapter.id}`}>
+  <span class="pill">{chapter.stageName}</span>
+  <h3>{chapter.name}</h3>
+  <p>{chapter.description}</p>
+  <div class="meta">{videoCount} 个视频 · {chapter.sections.length} 个栏目</div>
+</a>
+
+<style>
+  .chapter-card {
+    display: block;
+    padding: 22px;
+    transition: transform 0.18s ease, border-color 0.18s ease;
+  }
+
+  .chapter-card:hover {
+    border-color: #bfdbfe;
+    transform: translateY(-2px);
+  }
+
+  h3 {
+    margin: 14px 0 8px;
+    font-size: 22px;
+  }
+
+  p {
+    margin: 0 0 18px;
+    color: var(--muted);
+  }
+
+  .meta {
+    color: var(--brand-dark);
+    font-weight: 700;
+  }
+</style>

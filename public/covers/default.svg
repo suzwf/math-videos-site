@@ -1,0 +1,8 @@
+<svg width="1280" height="720" viewBox="0 0 1280 720" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1280" height="720" fill="#EFF6FF"/>
+  <rect x="90" y="80" width="1100" height="560" rx="44" fill="#FFFFFF" stroke="#DBEAFE" stroke-width="4"/>
+  <circle cx="640" cy="350" r="92" fill="#2563EB"/>
+  <path d="M618 304L704 354L618 404V304Z" fill="white"/>
+  <text x="640" y="500" text-anchor="middle" font-family="Arial, sans-serif" font-size="48" font-weight="700" fill="#1E3A8A">高中数学短视频</text>
+  <text x="640" y="560" text-anchor="middle" font-family="Arial, sans-serif" font-size="28" fill="#64748B">章节同步 · 基础复习 · 题型讲解</text>
+</svg>

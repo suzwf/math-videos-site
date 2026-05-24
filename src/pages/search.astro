@@ -1,0 +1,97 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import SearchBox from '../components/SearchBox.astro';
+import VideoCard from '../components/VideoCard.astro';
+import { getPublishedVideos } from '../utils/videos';
+
+const videos = getPublishedVideos();
+const title = '搜索高中数学短视频';
+---
+<BaseLayout title={title} description="搜索高中数学章节、知识点、题型和复习视频。">
+  <Header />
+  <main class="section">
+    <div class="container">
+      <h1>搜索视频</h1>
+      <p class="muted">输入章节、知识点或题型关键词，快速找到对应讲解。</p>
+      <SearchBox />
+
+      <div class="result-head">
+        <h2 id="result-title">全部视频</h2>
+        <span id="result-count" class="muted">共 {videos.length} 个视频</span>
+      </div>
+
+      <div id="results" class="grid grid-3">
+        {videos.map((video) => (
+          <div class="result-item" data-search={`${video.title} ${video.chapter} ${video.section} ${video.video_type} ${video.description} ${video.keywords.join(' ')}`}>
+            <VideoCard video={video} />
+          </div>
+        ))}
+      </div>
+
+      <div id="empty" class="empty card" hidden>
+        <h2>没有找到相关视频</h2>
+        <p class="muted">可以换一个关键词，例如“函数”“向量”“数列”。</p>
+      </div>
+    </div>
+  </main>
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const query = params.get('q')?.trim() ?? '';
+    const input = document.querySelector<HTMLInputElement>('input[name="q"]');
+    const items = Array.from(document.querySelectorAll<HTMLElement>('.result-item'));
+    const resultTitle = document.querySelector<HTMLElement>('#result-title');
+    const resultCount = document.querySelector<HTMLElement>('#result-count');
+    const empty = document.querySelector<HTMLElement>('#empty');
+
+    if (input) {
+      input.value = query;
+    }
+
+    if (query && resultTitle && resultCount && empty) {
+      const normalizedQuery = query.toLowerCase();
+      let count = 0;
+
+      items.forEach((item) => {
+        const matched = item.dataset.search?.toLowerCase().includes(normalizedQuery) ?? false;
+        item.hidden = !matched;
+        if (matched) {
+          count += 1;
+        }
+      });
+
+      resultTitle.textContent = `“${query}” 的搜索结果`;
+      resultCount.textContent = `共 ${count} 个视频`;
+      empty.hidden = count > 0;
+    }
+  </script>
+</BaseLayout>
+
+<style>
+  h1 {
+    margin: 0 0 8px;
+    font-size: 42px;
+  }
+
+  .result-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+    margin: 34px 0 18px;
+  }
+
+  .result-head h2 {
+    margin: 0;
+  }
+
+  .result-item[hidden],
+  .empty[hidden] {
+    display: none;
+  }
+
+  .empty {
+    padding: 34px;
+    text-align: center;
+  }
+</style>
